@@ -55,7 +55,15 @@ class Car:
 
 
 class Obstacle:
-    def __init__(self, x, y, wight, height, image, speed) -> None:
+    def __init__(
+        self,
+        x: int,
+        y: int,
+        wight: int,
+        height: int,
+        image: pygame.Surface,
+        speed: float,
+    ) -> None:
         self.x = x
         self.y = y
         self.wight = wight
@@ -63,7 +71,7 @@ class Obstacle:
         self.image = image
         self.speed = speed
 
-    def move(self):
+    def move(self) -> bool:
         if self.x >= -self.wight:
             display.blit(self.image, (self.x, self.y, self.wight, self.height))
             self.x -= self.speed
@@ -72,15 +80,12 @@ class Obstacle:
         self.y = display_height + 60 + random.randrange(-20, 0) * 50
         return False
 
-    def change_speed(self, new_speed):
+    def change_speed(self, new_speed: int) -> None:
         self.speed = new_speed
         print(f'new speed: {new_speed}')
 
-    def return_self(self, radius):
-        self.x = radius
-
     @property
-    def rect(self):
+    def rect(self) -> pygame.Rect:
         return pygame.Rect(self.x, self.y, self.wight, self.height)
 
 
@@ -88,7 +93,7 @@ class ObstacleList:
     up_speed_every_sec = 2.5
     up_speed_by = 1.05
 
-    def __init__(self, initial_speed) -> None:
+    def __init__(self, initial_speed: float) -> None:
         self.obstacles = []
         self.obstacles.append(
             Obstacle(
@@ -153,7 +158,7 @@ class ObstacleList:
         self.last_speed_update_sec = 0
         self.speed = initial_speed
 
-    def change_speed(self, current_secounds):
+    def change_speed(self, current_secounds: float) -> None:
         if (
             self.last_speed_update_sec + self.up_speed_every_sec
             < current_secounds
@@ -163,15 +168,15 @@ class ObstacleList:
             for obstacle in self.obstacles:
                 obstacle.change_speed(self.speed)
 
-    def draw(self):
+    def draw(self) -> None:
         for obstacle in self.obstacles:
             obstacle.move()
 
-    def to_rect(self):
+    def to_rect(self) -> list:
         return [x.rect for x in self.obstacles]
 
 
-def run_game():
+def run_game() -> bool | None:
     game = True
     global car_image
     start_speed = 3
@@ -189,7 +194,6 @@ def run_game():
 
         car.move(pygame.key.get_pressed())
         display.fill((255, 255, 255))
-        # draw_array(obstacle_arr)
         obstacles.draw()
         car.draw(display)
         if car.rect.collidelist(obstacles.to_rect()) >= 0:
@@ -210,16 +214,16 @@ def run_game():
 
 
 def print_text(
-    message,
-    x,
-    y,
-):
+    message: str,
+    x: int,
+    y: int,
+) -> None:
     font_type = pygame.font.Font(None, 30)
     text = font_type.render(message, False, (0, 180, 0))
     display.blit(text, (x, y))
 
 
-def pause():
+def pause() -> None:
     paused = True
     pygame.time.wait(100)
     while paused:
@@ -235,7 +239,7 @@ def pause():
         clock.tick(15)
 
 
-def game_over():
+def game_over() -> bool | None:
     stoped = True
     while stoped:
         for event in pygame.event.get():
