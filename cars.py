@@ -24,6 +24,7 @@ car_y = display_height - car_height - 260
 car_image = pygame.image.load('asserts/car.webp')
 conus_image = pygame.image.load('asserts/conus.png')
 pygame.mixer.music.load('asserts/sound.mp3')
+pygame.mixer.music.set_volume(0.3)
 
 myfont15 = pygame.font.SysFont('Comic Sans MS', 15)
 
@@ -82,7 +83,6 @@ class Obstacle:
 
     def change_speed(self, new_speed: int) -> None:
         self.speed = new_speed
-        print(f'new speed: {new_speed}')
 
     @property
     def rect(self) -> pygame.Rect:
